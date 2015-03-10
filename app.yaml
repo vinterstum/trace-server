@@ -1,0 +1,13 @@
+application: google.com:slowreports
+
+version: 1
+api_version: 1
+runtime: python27
+threadsafe: true
+
+handlers:
+- url: /
+  script: main.app
+
+- url: /upload
+  script: main.app
