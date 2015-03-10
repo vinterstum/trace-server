@@ -1,5 +1,6 @@
 import os
 import webapp2
+import uuid
 
 import cloudstorage as gcs
 
@@ -12,29 +13,13 @@ my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
 gcs.set_default_retry_params(my_default_retry_params)
 
 
-# class Trace(ndb.Model):
-#     prod = ndb.StringProperty()
-#     ver = ndb.StringProperty()
-#     guid = ndb.StringProperty()
-#     trace = ndb.BlobProperty()
-#     date = ndb.DateTimeProperty(auto_now_add=True)
-
 class UploadPage(webapp2.RequestHandler):
   def post(self):
-    trace_guid = self.request.get('guid')
-
-    # trace_object = Trace(parent=ndb.Key('Trace', trace_guid or "default_guid"))
-    # trace_object.guid = trace_guid
-    # trace_object.trace = self.request.get('trace')
-    # trace_object.prod = self.request.get('prod')
-    # trace_object.ver = self.request.get('ver')
-    # trace_object.put()
-
-    bucket_name = '/' + app_identity.get_default_gcs_bucket_name() + '/' + (trace_guid or 'default_guid')
+    bucket_name = '/' + app_identity.get_default_gcs_bucket_name() + '/' + str(uuid.uuid4())
     write_retry_params = gcs.RetryParams(backoff_factor=1.1)
     gcs_file = gcs.open(bucket_name,
                         'w',
-                        content_type='text/plain',
+                        content_type='application/octet-stream',
                         options={'x-goog-meta-foo': 'foo',
                                  'x-goog-meta-bar': 'bar'},
                         retry_params=write_retry_params)
