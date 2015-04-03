@@ -2,6 +2,8 @@ import os
 import webapp2
 import uuid
 
+import models
+
 import cloudstorage as gcs
 from google.appengine.ext import ndb
 from google.appengine.api import app_identity
@@ -11,12 +13,6 @@ my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
                                           backoff_factor=2,
                                           max_retry_period=15)
 gcs.set_default_retry_params(my_default_retry_params)
-
-class UnprocessedTrace(ndb.Model):
-    prod = ndb.StringProperty()
-    ver = ndb.StringProperty()
-    bucket_name = ndb.StringProperty()
-    date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class UploadPage(webapp2.RequestHandler):
@@ -33,7 +29,7 @@ class UploadPage(webapp2.RequestHandler):
     gcs_file.write(self.request.get('trace'))
     gcs_file.close()
 
-    trace_object = UnprocessedTrace()
+    trace_object = models.UnprocessedTrace()
     trace_object.bucket_name = bucket_name
     trace_object.prod = self.request.get('prod')
     trace_object.ver = self.request.get('ver')

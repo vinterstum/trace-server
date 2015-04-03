@@ -3,18 +3,6 @@ application: google.com:slowreports
 includes:
 - mapreduce/include.yaml
 
-indexes:
-- kind: _AE_Pipeline_Record
-  properties:
-  - name: is_root_pipeline
-  - name: start_time
-    direction: desc
-- kind: _AE_Pipeline_Record
-  properties:
-  - name: class_path
-  - name: start_time
-    direction: desc
-
 version: 1
 api_version: 1
 runtime: python27
